@@ -2,8 +2,8 @@
 #-*- coding:utf-8 -*-
 
 from flask import Blueprint,render_template, request
-from .models import Admin
-from app import db
+from .models import Admin,alarm_setting
+from word_setting import db
 
 admin = Blueprint('admin',__name__)
 

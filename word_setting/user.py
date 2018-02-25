@@ -2,8 +2,11 @@
 #-*- coding:utf-8 -*-
 
 from flask import Blueprint, render_template, redirect,request
-from .models import User
-from app import db
+from .models import User,alarm_setting
+from word_setting import db
+import datetime
+
+today = datetime.datetime.now().strftime('%Y-%m-%d')
 
 user = Blueprint('user',__name__)
 
@@ -31,4 +34,6 @@ def add():
 
 @user.route('/show')
 def show():
-    return 'user_show'
+    print(today)
+    setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time))
+    return render_template('user/show.html',settings=setting,date = today)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
 
-from app import app
+from word_setting import app
 from .admin import admin
 from .user import user
 
