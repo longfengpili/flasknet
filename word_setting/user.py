@@ -8,6 +8,7 @@ import datetime
 import config as cf
 import logging
 from logging import config
+import re
 
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
@@ -41,9 +42,11 @@ def add():
 @user.route('/show')
 def show():
     ip = request.remote_addr
-    load_log.info(ip)
-    if ip in cf.iplist:
-        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time))
+    User_Agent = request.headers.get('User-Agent')
+    load_log.info('请求IP【{}】,请求头{}'.format(ip,User_Agent))
+    browser_name = re.match('.*(Firefox).*',User_Agent)
+    if ip in cf.iplist and browser_name is not None:
+        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(alarm_setting.total_times)).order_by(db.desc(alarm_setting.current))
         return render_template('user/show.html',settings=setting,date = today)
     else:
         return render_template('user/index.html')
