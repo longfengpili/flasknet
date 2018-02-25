@@ -5,6 +5,12 @@ from flask import Blueprint, render_template, redirect,request
 from .models import User,alarm_setting
 from word_setting import db
 import datetime
+import config as cf
+import logging
+from logging import config
+
+config.fileConfig('loadlog.conf')
+load_log = logging.getLogger('loading')
 
 today = datetime.datetime.now().strftime('%Y-%m-%d')
 
@@ -34,6 +40,10 @@ def add():
 
 @user.route('/show')
 def show():
-    print(today)
-    setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time))
-    return render_template('user/show.html',settings=setting,date = today)
+    ip = request.remote_addr
+    load_log.info(ip)
+    if ip in cf.iplist:
+        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time))
+        return render_template('user/show.html',settings=setting,date = today)
+    else:
+        return render_template('user/index.html')
