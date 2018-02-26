@@ -13,7 +13,7 @@ import re
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
 
-today = datetime.datetime.now().strftime('%Y-%m-%d')
+
 
 user = Blueprint('user',__name__)
 
@@ -41,6 +41,7 @@ def add():
 
 @user.route('/show')
 def show():
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
     ip = request.remote_addr
     User_Agent = request.headers.get('User-Agent')
     load_log.info('请求IP【{}】,请求头{}'.format(ip,User_Agent))
