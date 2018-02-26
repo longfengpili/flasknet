@@ -47,7 +47,7 @@ def show():
     load_log.info('请求IP【{}】,请求头{}'.format(ip,User_Agent))
     browser_name = re.match('.*(Firefox).*',User_Agent)
     if ip in cf.iplist and browser_name is not None:
-        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(alarm_setting.total_times)).order_by(db.desc(alarm_setting.current))
+        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(alarm_setting.total_times)).order_by(db.desc(alarm_setting.current)).order_by(alarm_setting.app_name).order_by(alarm_setting.platform)
         return render_template('user/show.html',settings=setting,date = today)
     else:
         return render_template('user/index.html')
