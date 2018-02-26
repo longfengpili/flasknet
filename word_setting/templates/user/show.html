@@ -3,12 +3,16 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="600">
     <title>show</title>
 </head>
 
 <body>
     <h1 align="center">【{{date}}】配置及监控状态</h1>
 
+    <script>setInterval("timenow.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());");
+    </script>
+    <div id="timenow" align="right" style="padding-right:60px"></div>
 
     <!-- <img src="{{ url_for('static',filename='user/images/table.jpg')}}" width="400" height="300"/>   -->
 
