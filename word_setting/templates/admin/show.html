@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="600">
+    <title>show</title>
+</head>
+
+<body>
+    <h1 align="center">【{{date}}】配置及监控状态</h1>
+
+    <!-- <script>setInterval("timenow.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
+    </script>
+    <div id="timenow" align="right" style="padding-right:60px"></div> -->
+
+
+    {% if settings %}
+    <table border="1px" align="center" cellspacing="0" cellpadding="6" background="{{ url_for('static',filename='user/images/table.jpg')}}"
+        ;>
+        <tr>
+            <th>app_name</th>
+            <th>platform</th>
+            <th>current</th>
+            <th>max_line</th>
+            <th>times</th>
+            <th>total_times</th>
+            <th>last_mail_time</th>
+            <th>alarm_line</th>
+            <th>alarm_type</th>
+            <th>alarm_min_line</th>
+            <th>alarm_level</th>
+            <th>alarm_iap</th>
+            <!-- <th>data_ts</th> -->
+        </tr>
+
+        {% for set in settings %}
+        <tr>
+            <td align="center">{{set.app_name}}</td>
+            <td align="center">{{set.platform}}</td>
+            <td align="center">{{set.current}}</td>
+            <td align="center">{{set.max_line}}</td>
+            <td align="center">{{set.times}}</td>
+            <td align="center">{{set.total_times}}</td>
+            <td align="center">{{set.last_mail_time}}</td>
+            <td align="center">{{set.alarm_line}}</td>
+            <td align="center">{{set.alarm_type}}</td>
+            <td align="center">{{set.alarm_min_line}}</td>
+            <td align="center">{{set.alarm_level}}</td>
+            <td align="center">{{set.alarm_iap}}</td>
+            <!-- <td align="center">{{set.data_ts}}</td> -->
+        </tr>
+        {% endfor %}
+
+        <tr>
+            <td colspan="12">
+                <ul>
+                    <li>每出现一次预警，【current】数值增加1，当【current】=【max_line】则发送一次邮件！</li>
+                    <li>【times】发送一次邮件则数值增加1，若达到9则重置；</li>
+                    <li>【total_times】是指统计日发送邮件的次数；</li>
+                    <li>【last_mail_time】最近一次发送邮件报警的时间，默认1987-01-01</li>
+                    <li>【alarm_line】若同时刻数据与昨日数据的环比低于次数据，则进行报警。</li>
+                    <li>【alarm_type】0代表监控level和iap，1代表只监控level，2代表只监控iap。</li>
+                    <p align="right" style="padding-right:20px">power by chunyang.xu
+                        <a target="_blank" href="http://sighttp.qq.com/authd?IDKEY=f36a98894c04255e4c9aa3334c8107d55e0d006e2749e336">
+                            <img border="0" style="display: inline-block; vertical-align: middle" src="http://wpa.qq.com/imgd?IDKEY=f36a98894c04255e4c9aa3334c8107d55e0d006e2749e336&pic=51"
+                                alt="点击这里给我发消息" title="点击这里给我发消息">
+                        </a>
+                    </p>
+
+                </ul>
+            </td>
+        </tr>
+    </table>
+    {% endif %}
+</body>
+
+</html>

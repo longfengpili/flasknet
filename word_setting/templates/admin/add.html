@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AdminsAdd</title>
+    <title>UserAdd</title>
 </head>
 <body>
 <form action="/admin/add/" method="POST">
@@ -11,13 +11,13 @@
     pwd:<input type="password" name="password" />
     <input type="submit" value="add" />
 </form>
-{% if admins %}
+{% if users %}
 <table border="1px">
     <tr>
         <th>UserName</th>
         <th>Email</th>
     </tr>
-    {% for u in admins %}
+    {% for u in users %}
         <tr>
             <td>{{u.username}}</td>
             <td>{{u.email}}</td>

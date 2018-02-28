@@ -2,6 +2,7 @@
 #-*- coding:utf-8 -*-
 
 from word_setting import db  #db是在app/__init__.py生成的关联后的SQLAlchemy实例
+from word_setting import login_manger
 
 class User(db.Model):
     __tablename__ = 'users'
