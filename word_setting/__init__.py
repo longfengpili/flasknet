@@ -20,9 +20,9 @@ login_manger.init_app(app)
 #认证加密程度
 login_manger.session_protection = 'strong'
 #登陆认证的处理视图
-login_manger.login_view = 'admin.login'
+login_manger.login_view = 'admin.index'
 #登陆提示信息
-login_manger.login_message = u'对不起，您还没有登录'
+login_manger.login_message = u'test'
 login_manger.login_message_category = 'info'
 
 
