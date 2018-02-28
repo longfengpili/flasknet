@@ -43,7 +43,12 @@ def login():
             login_user(admin)  
             #next_url = request.args.get('next')  
             return redirect(url_for('admin.show'))
-    
+    return render_template('admin/login.html')
+
+@admin.route("/logout")
+@login_required
+def logout():
+    logout_user()
     return render_template('admin/login.html')
 
 
