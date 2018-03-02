@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
 from .models import Admin,alarm_setting
-from word_setting import db,login_manger
+from word_setting import db,login_manger,app
 import datetime
 import config as cf
 import logging
@@ -47,20 +47,21 @@ def index():
 @admin.route('/login/', methods=['POST', 'GET'])
 def login():
     if request.cookies.get('username'):
-        today = datetime.datetime.now().strftime('%Y-%m-%d')
-        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(
-            alarm_setting.total_times)).order_by(db.desc(alarm_setting.times)).order_by(db.desc(alarm_setting.current)).order_by(alarm_setting.app_name).order_by(alarm_setting.platform)
-        return render_template('admin/show.html', settings=setting, date=today)
+        username = request.cookies.get('username')
+        admin=Admin.query.filter_by(username = username).first()
+        login_user(admin)
+        next_url = request.args.get('next')
+        response = make_response(redirect(next_url or url_for('admin.show')))
+        return response
     elif request.method == 'POST':
         username = request.form.get('username')
         admin = Admin.query.filter_by(username=username).first()
-        print(admin)
         if not admin: 
             flash('该用户不存在')
         elif request.form.get('password') != admin.password:  
             flash('密码错误')  
         else:
-            login_user(admin)  
+            login_user(admin)
             next_url = request.args.get('next') 
             response = make_response(redirect(next_url or url_for('admin.show')))
             response.set_cookie("username", username, max_age=30)
@@ -100,6 +101,7 @@ def add():
 @login_required
 def show():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
+    print(today)
     ip = request.remote_addr
     User_Agent = request.headers.get('User-Agent')
     load_log.info('请求IP【{}】,请求头{}'.format(ip, User_Agent))
@@ -110,3 +112,7 @@ def show():
         return render_template('admin/show.html', settings=setting, date=today)
     else:
         return render_template('admin/index.html')
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('admin/not_found.html'), 404
