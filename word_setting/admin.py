@@ -25,18 +25,6 @@ def load_user(userid):
     return Admin.query.get(userid)
 
 
-@admin.route("/set_cookie")
-def set_cookie(username):
-    """设置cookie"""
-    #先创建响应对象
-    
-    resp = make_response("set cookie OK")
-    # 通过max_age控制cookie有效期, 单位:秒
-    resp.set_cookie("username", username, max_age=30000)
-    print(resp,username)
-    return resp
-
-
 @admin.route("/get_cookie")
 def get_cookie():
     """获取cookie"""
@@ -59,7 +47,10 @@ def index():
 @admin.route('/login/', methods=['POST', 'GET'])
 def login():
     if request.cookies.get('username'):
-        return redirect(url_for('admin.show'))
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(
+            alarm_setting.total_times)).order_by(db.desc(alarm_setting.times)).order_by(db.desc(alarm_setting.current)).order_by(alarm_setting.app_name).order_by(alarm_setting.platform)
+        return render_template('admin/show.html', settings=setting, date=today)
     elif request.method == 'POST':
         username = request.form.get('username')
         admin = Admin.query.filter_by(username=username).first()
@@ -70,8 +61,10 @@ def login():
             flash('密码错误')  
         else:
             login_user(admin)  
-            #next_url = request.args.get('next') 
-            return redirect(url_for('admin.show'))
+            next_url = request.args.get('next') 
+            response = make_response(redirect(next_url or url_for('admin.show')))
+            response.set_cookie("username", username, max_age=30)
+            return response
     return render_template('admin/login.html')
 
 @admin.route("/logout")
