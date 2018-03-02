@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
 
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
 from .models import Admin,alarm_setting
 from word_setting import db,login_manger
 import datetime
@@ -13,7 +13,7 @@ import re
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
 
-from flask_login import login_required, logout_user, login_user
+from flask_login import login_required, logout_user, login_user,current_user
 
 
 
@@ -24,6 +24,38 @@ admin = Blueprint('admin',__name__)
 def load_user(userid):
     return Admin.query.get(userid)
 
+
+@admin.route("/set_cookie")
+def set_cookie(username):
+    """设置cookie"""
+    #先创建响应对象
+    username = request.form.get('username')
+    admin = Admin.query.filter_by(username=username).first()
+
+    if admin and request.form.get('password') == admin.password:
+        resp = make_response("set cookie OK")
+        # 通过max_age控制cookie有效期, 单位:秒
+        resp.set_cookie("username", username, max_age=30000)
+        print(resp,username)
+        return resp
+    else:
+        return render_template('admin/login.html')
+
+
+@admin.route("/get_cookie")
+def get_cookie():
+    """获取cookie"""
+    cookie = request.cookies.get('username')
+    return "cookie username=%s" % cookie
+
+
+@admin.route("/delete_cookie")
+def delete_cookie(username):
+    """删除cookie"""
+    resp = make_response("delete cookie ok")
+    resp.delete_cookie(username)
+    return resp
+
 @admin.route('/index')
 def index():
     return render_template('admin/index.html')
@@ -31,7 +63,9 @@ def index():
 
 @admin.route('/login/', methods=['POST', 'GET'])
 def login():
-    if request.method == 'POST':
+    if request.cookies.get('username'):
+        return redirect(url_for('admin.show'))
+    elif request.method == 'POST':
         username = request.form.get('username')
         admin = Admin.query.filter_by(username=username).first()
         print(admin)
@@ -41,15 +75,18 @@ def login():
             flash('密码错误')  
         else:
             login_user(admin)  
-            #next_url = request.args.get('next')  
+            #next_url = request.args.get('next') 
             return redirect(url_for('admin.show'))
     return render_template('admin/login.html')
 
 @admin.route("/logout")
 @login_required
 def logout():
+    username = current_user.username
+    print(username)
     logout_user()
-    return render_template('admin/login.html')
+    delete_cookie(username)
+    return redirect(url_for('admin.show'))
 
 
 @admin.route('/add/',methods=['POST','GET'])
