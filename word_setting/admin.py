@@ -29,17 +29,12 @@ def load_user(userid):
 def set_cookie(username):
     """设置cookie"""
     #先创建响应对象
-    username = request.form.get('username')
-    admin = Admin.query.filter_by(username=username).first()
-
-    if admin and request.form.get('password') == admin.password:
-        resp = make_response("set cookie OK")
-        # 通过max_age控制cookie有效期, 单位:秒
-        resp.set_cookie("username", username, max_age=30000)
-        print(resp,username)
-        return resp
-    else:
-        return render_template('admin/login.html')
+    
+    resp = make_response("set cookie OK")
+    # 通过max_age控制cookie有效期, 单位:秒
+    resp.set_cookie("username", username, max_age=30000)
+    print(resp,username)
+    return resp
 
 
 @admin.route("/get_cookie")
