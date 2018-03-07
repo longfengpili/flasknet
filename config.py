@@ -8,3 +8,5 @@ import flasknet_setting as fs
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}:3306/word?charset=utf8'.format(fs.mysqlname,fs.mysqlpasswd,fs.mysqlip)
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 iplist = fs.iplist
+
+SECRET_KEY = '123456'

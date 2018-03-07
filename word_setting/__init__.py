@@ -7,7 +7,6 @@ from flask import Flask, url_for, request, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config.from_object('config')
-app.config['SECRET_KEY'] = '123456'
 db = SQLAlchemy(app)
 
 from flask_login import LoginManager
@@ -22,7 +21,7 @@ login_manger.session_protection = 'strong'
 #登陆认证的处理视图
 login_manger.login_view = 'admin.login'
 #登陆提示信息
-login_manger.login_message = u'test'
+login_manger.login_message = u'请输入密码'
 login_manger.login_message_category = 'info'
 
 

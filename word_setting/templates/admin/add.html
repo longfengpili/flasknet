@@ -1,29 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>UserAdd</title>
+    <title>Admin Add</title>
 </head>
+
 <body>
-<form action="/admin/add/" method="POST">
-    user:<input type="text" name="username" />
-    email:<input type="text" name="email" />
-    pwd:<input type="password" name="password" />
-    <input type="submit" value="add" />
-</form>
-{% if users %}
-<table border="1px">
-    <tr>
-        <th>UserName</th>
-        <th>Email</th>
-    </tr>
-    {% for u in users %}
-        <tr>
-            <td>{{u.username}}</td>
-            <td>{{u.email}}</td>
-        </tr>
-    {% endfor %}
-</table>
-{% endif %}
-</body>
+
+    <br>
+    <div style="height: 60px"></div>
+    <strong>
+        <p align="center" style="font-size:20px;">欢迎来到zenjoy!!!
+            <script>setInterval("timenow.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());", 10);
+            </script>
+            <div id="timenow" align="center" style="font-size:20px;"></div>
+        </p>
+    </strong>
+    <br/>
+    <div style="width:100%;text-align:center;">
+        <form action="/admin/add/" method="POST">
+            Username：
+            <input type="text" name="username" /> Email:
+            <input type="text" name="email" /> Password：
+            <input type="password" name="password" />
+            <input type="submit" value="提      交" />
+        </form>
+
+
+        {% if admins %}
+        <table border="1px" align="center" cellspacing="0" cellpadding="10" style="margin-top: 40px;">
+            <tr>
+                <th>UserName</th>
+                <th>Email</th>
+            </tr>
+            {% for u in admins %}
+            <tr>
+                <td>{{u.username}}</td>
+                <td>{{u.email}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+</div>
+
+
 </html>

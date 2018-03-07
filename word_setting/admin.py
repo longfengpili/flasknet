@@ -4,11 +4,12 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
 from .models import Admin,alarm_setting
 from word_setting import db,login_manger,app
-import datetime
+import datetime,time
 import config as cf
 import logging
 from logging import config
 import re
+
 
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
@@ -68,14 +69,14 @@ def login():
             return response
     return render_template('admin/login.html')
 
-@admin.route("/logout")
+@admin.route("/logout/")
 @login_required
 def logout():
     username = current_user.username
     print(username)
     logout_user()
     delete_cookie(username)
-    return redirect(url_for('admin.show'))
+    return redirect(url_for('admin.login'))
 
 
 @admin.route('/add/',methods=['POST','GET'])
