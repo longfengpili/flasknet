@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
-from .models import Admin,alarm_setting
+from .models import Admin,alarm_setting,User
 from word_setting import db,login_manger,app
 import datetime,time
 import config as cf
@@ -86,15 +86,25 @@ def add():
         p_admin = request.form.get('username',None)
         p_email = request.form.get('email',None)
         p_password = request.form.get('password',None)
+        p_role = request.form.get('role',None)
 
         if not p_admin or not p_email or not p_password:
             return 'input error'
-
-        newobj = Admin(username=p_admin, email=p_email, password=p_password)
-        db.session.add(newobj)
-        db.session.commit()
-        admins = Admin.query.all()
-        return render_template('admin/add.html',admins=admins)
+        
+        if p_role == 'admin':
+            newobj = Admin(username=p_admin, email=p_email, password=p_password)
+            db.session.add(newobj)
+            db.session.commit()
+            admins = Admin.query.all()
+            return redirect(url_for('admin.add'))
+            #return render_template('admin/add.html',admins=admins)
+        elif p_role == 'user':
+            newobj = User(username=p_admin, email=p_email,password=p_password)
+            db.session.add(newobj)
+            db.session.commit()
+            users = User.query.all()
+            return redirect(url_for('user.add'))
+            #return render_template('user/add.html', users=users)
     admins = Admin.query.all()
     return render_template('admin/add.html',admins=admins)
 
