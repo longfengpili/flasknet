@@ -8,10 +8,11 @@
 </head>
 
 <body>
-    <div align="right">
-        {{current_user}}
-        <a href="{{ url_for('admin.logout')}}">登出</a>
-    </div>
+    <p align="right">{{current_user}}
+        <a href="{{url_for('admin.logout')}}">
+            <img border="0" src="{{ url_for('static',filename='admin/images/logout.jpg')}}" alt="logout" width="60" height="30" align="middle">
+        </a>
+    </p>
     <h1 align="center">【{{date}}】配置及监控状态</h1>
 
     <!-- <script>setInterval("timenow.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
