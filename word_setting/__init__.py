@@ -21,8 +21,22 @@ login_manger.session_protection = 'strong'
 #登陆认证的处理视图
 login_manger.login_view = 'admin.login'
 #登陆提示信息
-login_manger.login_message = u'请输入密码'
+login_manger.login_message = u'请登录'
 login_manger.login_message_category = 'info'
+
+
+#用户认证
+login_manger_user = LoginManager()
+
+#配置用户认证信息
+login_manger_user.init_app(app)
+#认证加密程度
+login_manger_user.session_protection = 'strong'
+#登陆认证的处理视图
+login_manger_user.login_view = 'user.login'
+#登陆提示信息
+login_manger_user.login_message = u'请登录'
+login_manger_user.login_message_category = 'info'
 
 
 from word_setting import models

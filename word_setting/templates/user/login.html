@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        User Login page
+    </title>
+</head>
+<body>
+    <br>
+    <div style="height: 60px"></div>
+    <strong>
+        <p align="center" style="font-size:20px;">欢迎来到zenjoy!!!
+            <script>setInterval("timenow.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());", 10);
+            </script>
+            <div id="timenow" align="center" style="font-size:20px;"></div>
+        </p>
+    </strong>
+    <br/>
+    <div style="width:100%;text-align:center;">
+        <form action="" method="POST">
+            <br>Username
+            <input type="text" name="username" />
+            <br/>
+            <br>Password
+            <input type="password" name="password" />
+            <br/>
+            <br>
+            <input type="submit" value="登      录" />
+            <br/>
+        </form>
+
+        <div class="container">
+            <br> {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <p style="color:red">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}</p>
+            </div>
+            {% endfor %} {% block page_content %}{% endblock %}
+        </div>
+        <br/>
+    </div>
+</body>
+
+</html>

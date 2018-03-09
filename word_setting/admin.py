@@ -103,10 +103,11 @@ def add():
             db.session.add(newobj)
             db.session.commit()
             users = User.query.all()
-            return redirect(url_for('user.add'))
+            return redirect(url_for('admin.add'))
             #return render_template('user/add.html', users=users)
     admins = Admin.query.all()
-    return render_template('admin/add.html',admins=admins)
+    users = User.query.all()
+    return render_template('admin/add.html',admins=admins,users=users)
 
 @admin.route('/show')
 @login_required

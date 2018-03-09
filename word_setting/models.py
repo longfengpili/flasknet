@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
 
-from word_setting import db  #db是在app/__init__.py生成的关联后的SQLAlchemy实例
+from word_setting import db  # db是在app/__init__.py生成的关联后的SQLAlchemy实例
 from word_setting import login_manger
+
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -10,6 +11,18 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(320), unique=True)
     password = db.Column(db.String(32), nullable=False)
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -24,10 +37,13 @@ class Admin(db.Model):
 
     def is_authenticated(self):
         return True
+
     def is_active(self):
         return True
+
     def is_anonymous(self):
         return False
+
     def get_id(self):
         return self.id
 
@@ -44,7 +60,7 @@ class alarm_setting(db.Model):
     times = db.Column(db.Integer)
     total_times = db.Column(db.Integer)
     last_mail_time = db.Column(db.DateTime)
-    alarm_line = db.Column(db.Numeric(10,2))
+    alarm_line = db.Column(db.Numeric(10, 2))
     alarm_type = db.Column(db.Integer)
     alarm_min_line = db.Column(db.Integer)
     alarm_level = db.Column(db.Integer)
@@ -53,4 +69,4 @@ class alarm_setting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     def __repr__(self):
-        return '<app_platform {}-{}>'.format(self.app_name,self.platform)
+        return '<app_platform {}-{}>'.format(self.app_name, self.platform)

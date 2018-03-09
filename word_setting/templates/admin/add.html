@@ -25,28 +25,47 @@
             <input type="text" name="email" /> Password：
             <input type="password" name="password" />
             <select name="role">
-                <option value="admin">Admin</option>
                 <option value="user">User</option>
+                <option value="admin">Admin</option>
             </select>
             <input type="submit" value="提      交" />
         </form>
 
-
-        {% if admins %}
-        <table border="1px" align="center" cellspacing="0" cellpadding="10" style="margin-top: 40px;">
+        <table width="60%" align="center"  style="margin-top: 40px;" cellpadding="0">
             <tr>
-                <th>UserName</th>
-                <th>Email</th>
+                <td valign="top">{% if admins%}
+                    <table border="1px" cellspacing="0" cellpadding="10" align="center">
+                        <tr>
+                            <th>AdminName</th>
+                            <th>Email</th>
+                        </tr>
+                        {% for u in admins %}
+                        <tr>
+                            <td>{{u.username}}</td>
+                            <td>{{u.email}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% endif %}
+                </td>
+                <td valign="top">
+                    {% if users %}
+                    <table border="1px" cellspacing="0" cellpadding="10" align="center">
+                        <tr>
+                            <th>UserName</th>
+                            <th>Email</th>
+                        </tr>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{u.username}}</td>
+                            <td>{{u.email}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    {% endif %}
+                </td>
             </tr>
-            {% for u in admins %}
-            <tr>
-                <td>{{u.username}}</td>
-                <td>{{u.email}}</td>
-            </tr>
-            {% endfor %}
         </table>
-        {% endif %}
-
     </div>
 
 
