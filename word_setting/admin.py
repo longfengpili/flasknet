@@ -129,7 +129,6 @@ def logout():
 
 @admin.route('/add/',methods=['POST','GET'])
 @login_required
-# @admin_login
 def add():
     if request.method == 'POST':
         p_admin = request.form.get('username',None)
@@ -158,9 +157,8 @@ def add():
     users = User.query.all()
     return render_template('admin/add.html',admins=admins,users=users)
 
-@admin.route('/show/')
+@admin.route('/show')
 @login_required
-#@admin_login
 def show():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     print(today)
