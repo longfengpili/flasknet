@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
 from .models import Admin,alarm_setting,User
-from word_setting import db,login_manger,app
+from word_setting import db,login_manager,app
 import datetime,time
 import config as cf
 import logging
@@ -14,15 +14,30 @@ import re
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
 
-from flask_login import login_required, logout_user, login_user,current_user
-
+from flask_login import login_required, logout_user, login_user, current_user
+from functools import wraps
 
 
 admin = Blueprint('admin',__name__)
 
+# def admin_login(func):
+#     @wraps(func)
+#     def admin_t(*args, **kwargs):
+#         print(current_user)
+#         if Admin.query.get(current_user):
+#             print(Admin.query.get(current_user))
+#             f = func()
+#             return None
+#         elif User.query.get(current_user):
+#             print(User.query.get(current_user))
+#             return redirect(url_for('user.show'))
+#         else:
+#             print('test')
+#     return admin_t
 
-@login_manger.user_loader
+@login_manager.user_loader
 def load_user(userid):
+    load_log.info(Admin.query.get(userid))
     return Admin.query.get(userid)
 
 
@@ -47,26 +62,59 @@ def index():
 
 @admin.route('/login/', methods=['POST', 'GET'])
 def login():
+    load_log.info(request.cookies.get('username'))
     if request.cookies.get('username'):
         username = request.cookies.get('username')
-        admin=Admin.query.filter_by(username = username).first()
-        login_user(admin)
-        next_url = request.args.get('next')
-        response = make_response(redirect(next_url or url_for('admin.show')))
-        return response
+        load_log.info(username)
+        if Admin.query.filter_by(username = username).first():
+            admin = Admin.query.filter_by(username = username).first()
+            load_log.info(admin)
+            login_user(admin)
+            load_log.info(current_user)
+            next_url = request.args.get('next')
+            response = make_response(redirect(next_url or url_for('admin.show')))
+            return response
+        elif User.query.filter_by(username=username).first():
+            user = User.query.filter_by(username=username).first()
+            load_log.info(user)
+            login_user(user)
+            next_url = request.args.get('next')
+            response = make_response(redirect(next_url or url_for('user.show')))
+            return response
     elif request.method == 'POST':
         username = request.form.get('username')
-        admin = Admin.query.filter_by(username=username).first()
-        if not admin: 
-            flash('该用户不存在')
-        elif request.form.get('password') != admin.password:  
-            flash('密码错误')  
+        load_log.info(username)
+        if Admin.query.filter_by(username = username).first():
+            admin = Admin.query.filter_by(username=username).first()
+            load_log.info(admin)
+            if not admin: 
+                flash('该用户不存在')
+            elif request.form.get('password') != admin.password:  
+                flash('密码错误')  
+            else:
+                login_user(admin)
+                load_log.info(admin)
+                load_log.info(current_user)
+                next_url = request.args.get('next') 
+                load_log.info(next_url)
+                response = make_response(redirect(next_url or url_for('admin.show')))
+                response.set_cookie("username", username, max_age=30)
+                return response
+        elif User.query.filter_by(username=username).first():
+            user = User.query.filter_by(username=username).first()
+            load_log.info(user)
+            if not user: 
+                flash('该用户不存在')
+            elif request.form.get('password') != user.password:  
+                flash('密码错误')  
+            else:
+                login_user(user)
+                response = make_response(redirect(url_for('user.show')))
+                response.set_cookie("username", username, max_age=30)
+                return response
         else:
-            login_user(admin)
-            next_url = request.args.get('next') 
-            response = make_response(redirect(next_url or url_for('admin.show')))
-            response.set_cookie("username", username, max_age=30)
-            return response
+            print('wrong')
+
     return render_template('admin/login.html')
 
 @admin.route("/logout/")
@@ -81,6 +129,7 @@ def logout():
 
 @admin.route('/add/',methods=['POST','GET'])
 @login_required
+# @admin_login
 def add():
     if request.method == 'POST':
         p_admin = request.form.get('username',None)
@@ -109,8 +158,9 @@ def add():
     users = User.query.all()
     return render_template('admin/add.html',admins=admins,users=users)
 
-@admin.route('/show')
+@admin.route('/show/')
 @login_required
+#@admin_login
 def show():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     print(today)
@@ -128,3 +178,5 @@ def show():
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('admin/not_found.html'), 404
+
+

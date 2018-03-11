@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from .models import User,alarm_setting
-from word_setting import db,login_manger_user,app
+from word_setting import db,login_manager,app
 import datetime
 import config as cf
 import logging
@@ -18,7 +18,7 @@ from flask_login import login_required, logout_user, login_user, current_user
 user = Blueprint('user',__name__)
 
 
-@login_manger_user.user_loader
+@login_manager.user_loader
 def load_user(userid):
     return User.query.get(userid)
 
@@ -37,37 +37,9 @@ def delete_cookie(username):
     resp.delete_cookie(username)
     return resp
 
-
 @user.route('/index')
 def index():
     return render_template('user/index.html')
-
-
-@user.route('/login/', methods=['POST', 'GET'])
-def login():
-    if request.cookies.get('username'):
-        username = request.cookies.get('username')
-        user = User.query.filter_by(username=username).first()
-        login_user(user)
-        next_url = request.args.get('next')
-        response = make_response(redirect(next_url or url_for('user.show')))
-        return response
-    elif request.method == 'POST':
-        username = request.form.get('username')
-        user = User.query.filter_by(username=username).first()
-        if not user:
-            flash('该用户不存在')
-        elif request.form.get('password') != user.password:
-            flash('密码错误')
-        else:
-            login_user(user)
-            next_url = request.args.get('next')
-            response = make_response(
-                redirect(next_url or url_for('user.show')))
-            response.set_cookie("username", username, max_age=30)
-            return response
-    return render_template('user/login.html')
-
 
 @user.route("/logout/")
 @login_required
@@ -76,26 +48,7 @@ def logout():
     print(username)
     logout_user()
     delete_cookie(username)
-    return redirect(url_for('user.login'))
-
-
-# @user.route('/add/',methods=['GET','POST'])
-# def add():
-#     if request.method == 'POST':
-#         p_user = request.form.get('username',None)
-#         p_email = request.form.get('email',None)
-#         p_password = request.form.get('password',None)
-
-#         if not p_user or not p_email or not p_password:
-#             return 'input error'
-
-#         newobj = User(username=p_user, email=p_email, password=p_password)
-#         db.session.add(newobj)
-#         db.session.commit()
-#         users = User.query.all()
-#         return render_template('user/add.html',users=users)
-#     users = User.query.all()
-#     return render_template('user/add.html',users=users)
+    return redirect(url_for('admin.login'))
 
 @user.route('/show')
 @login_required
