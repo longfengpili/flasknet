@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-from flask_login import LoginManager
+from flask_login import LoginManager,login_required, logout_user, login_user, current_user
 
 #用户认证
 login_manager = LoginManager()

@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from .models import User,alarm_setting
-from word_setting import db,login_manager,app
+from word_setting import db, login_manager, app, login_required, logout_user, login_user, current_user
 import datetime
 import config as cf
 import logging
@@ -12,8 +12,6 @@ import re
 
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
-
-from flask_login import login_required, logout_user, login_user, current_user
 
 user = Blueprint('user',__name__)
 
@@ -29,26 +27,20 @@ def get_cookie():
     cookie = request.cookies.get('username')
     return "cookie username=%s" % cookie
 
-
-@user.route("/delete_cookie")
-def delete_cookie(username):
-    """删除cookie"""
-    resp = make_response("delete cookie ok")
-    resp.delete_cookie(username)
-    return resp
-
 @user.route('/index')
 def index():
     return render_template('user/index.html')
 
-@user.route("/logout/")
-@login_required
+@user.route('/logout/')
+# @login_required
 def logout():
     username = current_user.username
-    print(username)
+    load_log.info(username)
+    response = make_response(redirect(url_for('admin.login')))
+    response.delete_cookie('username')
+    load_log.info(response)
     logout_user()
-    delete_cookie(username)
-    return redirect(url_for('admin.login'))
+    return response
 
 @user.route('/show')
 @login_required

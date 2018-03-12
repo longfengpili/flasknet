@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
 from .models import Admin,alarm_setting,User
-from word_setting import db,login_manager,app
+from word_setting import db,login_manager,app,login_required, logout_user, login_user, current_user
 import datetime,time
 import config as cf
 import logging
@@ -14,7 +14,6 @@ import re
 config.fileConfig('loadlog.conf')
 load_log = logging.getLogger('loading')
 
-from flask_login import login_required, logout_user, login_user, current_user
 from functools import wraps
 
 
@@ -117,7 +116,7 @@ def login():
 
     return render_template('admin/login.html')
 
-@admin.route("/logout/")
+@admin.route('/logout/')
 @login_required
 def logout():
     username = current_user.username
