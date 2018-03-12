@@ -32,7 +32,7 @@ def index():
     return render_template('user/index.html')
 
 @user.route('/logout/')
-# @login_required
+@login_required
 def logout():
     username = current_user.username
     load_log.info(username)

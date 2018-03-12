@@ -112,7 +112,7 @@ def login():
                 response.set_cookie("username", username, max_age=30)
                 return response
         else:
-            print('wrong')
+            load_log.info('wrong')
 
     return render_template('admin/login.html')
 
@@ -122,8 +122,9 @@ def logout():
     username = current_user.username
     print(username)
     logout_user()
-    delete_cookie(username)
-    return redirect(url_for('admin.login'))
+    response = make_response(redirect(url_for('admin.login')))
+    response.delete_cookie('username')
+    return response
 
 
 @admin.route('/add/',methods=['POST','GET'])
