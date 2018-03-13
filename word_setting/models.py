@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 from word_setting import db  # db是在app/__init__.py生成的关联后的SQLAlchemy实例
-from word_setting import login_manager
+#from word_setting import login_manager
 
 
 class User(db.Model):

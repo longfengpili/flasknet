@@ -16,9 +16,10 @@ load_log = logging.getLogger('loading')
 user = Blueprint('user',__name__)
 
 
-@login_manager.user_loader
-def load_user(userid):
-    return User.query.get(userid)
+# @login_manager.user_loader
+# def load_user(userid):
+#     load_log.info(User.query.get(userid))
+#     return User.query.get(userid)
 
 
 @user.route("/get_cookie")

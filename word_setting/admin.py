@@ -19,25 +19,14 @@ from functools import wraps
 
 admin = Blueprint('admin',__name__)
 
-# def admin_login(func):
-#     @wraps(func)
-#     def admin_t(*args, **kwargs):
-#         print(current_user)
-#         if Admin.query.get(current_user):
-#             print(Admin.query.get(current_user))
-#             f = func()
-#             return None
-#         elif User.query.get(current_user):
-#             print(User.query.get(current_user))
-#             return redirect(url_for('user.show'))
-#         else:
-#             print('test')
-#     return admin_t
-
 @login_manager.user_loader
 def load_user(userid):
-    load_log.info(Admin.query.get(userid))
-    return Admin.query.get(userid)
+    if Admin.query.get(userid):
+        load_log.info(Admin.query.get(userid))
+        return Admin.query.get(userid)
+    elif User.query.get(userid):
+        load_log.info(User.query.get(userid))
+        return User.query.get(userid)
 
 
 @admin.route("/get_cookie")
