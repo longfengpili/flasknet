@@ -26,7 +26,7 @@ user = Blueprint('user',__name__)
 def get_cookie():
     """获取cookie"""
     cookie = request.cookies.get('username')
-    return "cookie username=%s" % cookie
+    return "cookie username={}".format(cookie)
 
 @user.route('/index')
 def index():
@@ -36,10 +36,8 @@ def index():
 @login_required
 def logout():
     username = current_user.username
-    load_log.info(username)
     response = make_response(redirect(url_for('admin.login')))
     response.delete_cookie('username')
-    load_log.info(response)
     logout_user()
     return response
 
@@ -48,16 +46,16 @@ def logout():
 def show():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     ip = request.remote_addr
-    User_Agent = request.headers.get('User-Agent')
-    load_log.info('请求IP【{}】,请求头{}'.format(ip,User_Agent))
-    browser_name = re.match('.*(Firefox).*',User_Agent)
-    if ip in cf.iplist and browser_name is not None:
+    # User_Agent = request.headers.get('User-Agent')
+    load_log.info('请求IP【{}】,登录用户{}'.format(ip,current_user))
+    # browser_name = re.match('.*(Firefox).*',User_Agent)
+    if ip in cf.iplist:
         setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(alarm_setting.total_times)).order_by(db.desc(alarm_setting.times)).order_by(db.desc(alarm_setting.current)).order_by(alarm_setting.app_name).order_by(alarm_setting.platform)
         return render_template('user/show.html',settings=setting,date = today)
     else:
         return render_template('user/index.html')
 
 
-# @app.errorhandler(404)
-# def not_found_error(error):
-#     return render_template('user/not_found.html'), 404
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('user/not_found.html'), 404

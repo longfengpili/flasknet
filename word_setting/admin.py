@@ -20,13 +20,10 @@ def admin_login_required(func):
     @wraps(func)
     def admin_login_judge(*args,**rw):
         username = current_user.username
-        load_log.info(username)
         if Admin.query.filter_by(username=username).first():
-            load_log.info(Admin.query.filter_by(username=username).first())
             f = func()
             return f
         else:
-            load_log.info('admin.not_found')
             return render_template('admin/not_found.html')
     return admin_login_judge
 
@@ -36,10 +33,8 @@ admin = Blueprint('admin',__name__)
 @login_manager.user_loader
 def load_user(userid):
     if Admin.query.get(userid):
-        load_log.info(Admin.query.get(userid))
         return Admin.query.get(userid)
     elif User.query.get(userid):
-        load_log.info(User.query.get(userid))
         return User.query.get(userid)
 
 
@@ -47,7 +42,7 @@ def load_user(userid):
 def get_cookie():
     """获取cookie"""
     cookie = request.cookies.get('username')
-    return "cookie username=%s" % cookie
+    return "cookie username={}".format(cookie)
 
 
 @admin.route("/delete_cookie")
@@ -67,40 +62,31 @@ def login():
     load_log.info(request.cookies.get('username'))
     if request.cookies.get('username'):
         username = request.cookies.get('username')
-        load_log.info(username)
         if Admin.query.filter_by(username = username).first():
             admin = Admin.query.filter_by(username = username).first()
-            load_log.info(admin)
             login_user(admin)
-            load_log.info(current_user)
             next_url = request.args.get('next')
             response = make_response(redirect(next_url or url_for('admin.show')))
             return response
         elif User.query.filter_by(username=username).first():
             user = User.query.filter_by(username=username).first()
-            load_log.info(user)
             login_user(user)
             next_url = request.args.get('next')
             response = make_response(redirect(next_url or url_for('user.show')))
             return response
     elif request.method == 'POST':
         username = request.form.get('username')
-        load_log.info(username)
         if Admin.query.filter_by(username = username).first():
             admin = Admin.query.filter_by(username=username).first()
-            load_log.info(admin)
             if not admin: 
                 flash('该用户不存在')
             elif request.form.get('password') != admin.password:  
                 flash('密码错误')  
             else:
                 login_user(admin)
-                load_log.info(admin)
-                load_log.info(current_user)
                 next_url = request.args.get('next') 
-                load_log.info(next_url)
                 response = make_response(redirect(next_url or url_for('admin.show')))
-                response.set_cookie("username", username, max_age=30)
+                response.set_cookie("username", username, max_age=600)
                 return response
         elif User.query.filter_by(username=username).first():
             user = User.query.filter_by(username=username).first()
@@ -112,7 +98,7 @@ def login():
             else:
                 login_user(user)
                 response = make_response(redirect(url_for('user.show')))
-                response.set_cookie("username", username, max_age=30)
+                response.set_cookie("username", username, max_age=600)
                 return response
         else:
             load_log.info('wrong')
@@ -124,7 +110,6 @@ def login():
 @admin_login_required
 def logout():
     username = current_user.username
-    print(username)
     logout_user()
     response = make_response(redirect(url_for('admin.login')))
     response.delete_cookie('username')
@@ -167,12 +152,11 @@ def add():
 @admin_login_required
 def show():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
-    print(today)
     ip = request.remote_addr
-    User_Agent = request.headers.get('User-Agent')
-    load_log.info('请求IP【{}】,请求头{}'.format(ip, User_Agent))
-    browser_name = re.match('.*(Firefox).*', User_Agent)
-    if ip in cf.iplist and browser_name:
+    # User_Agent = request.headers.get('User-Agent')
+    load_log.info('请求IP【{}】,登录用户{}'.format(ip, current_user))
+    # browser_name = re.match('.*(Firefox).*', User_Agent)
+    if ip in cf.iplist:
         setting = db.session.query(alarm_setting).filter(alarm_setting.data_ts >= today).order_by(db.desc(alarm_setting.last_mail_time)).order_by(db.desc(
             alarm_setting.total_times)).order_by(db.desc(alarm_setting.times)).order_by(db.desc(alarm_setting.current)).order_by(alarm_setting.app_name).order_by(alarm_setting.platform)
         return render_template('admin/show.html', settings=setting, date=today)

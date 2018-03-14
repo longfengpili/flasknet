@@ -4,10 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="600">
-    <title>show</title>
+    <title>Admin show</title>
+
+    <style>
+        p {
+            margin: 0 auto
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a,
+        .dropbtn {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: #111;
+        }
+
+        .dropdown {
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
+    <ul>
+        <li>
+            <a class="active" href="/admin/index">zenjoy主页</a>
+        </li>
+        <li>
+            <a href="/user/show">数据监控(user)</a>
+        </li>
+        <li>
+            <a href="/admin/show">数据监控(admin)</a>
+        </li>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">管理功能</a>
+            <div class="dropdown-content">
+                <a href="/admin/add">用户管理</a>
+                <!-- <a href="#">链接 2</a>
+                <a href="#">链接 3</a> -->
+            </div>
+        </div>
+    </ul>
+
     <p align="right">{{current_user}}
         <a href="{{url_for('admin.logout')}}">
             <img border="0" src="{{ url_for('static',filename='admin/images/logout.jpg')}}" alt="logout" width="60" height="30" align="middle">
@@ -59,21 +138,19 @@
 
         <tr>
             <td colspan="12">
-                <ul>
-                    <li>每出现一次预警，【current】数值增加1，当【current】=【max_line】则发送一次邮件！</li>
-                    <li>【times】发送一次邮件则数值增加1，若达到9则重置；</li>
-                    <li>【total_times】是指统计日发送邮件的次数；</li>
-                    <li>【last_mail_time】最近一次发送邮件报警的时间，默认1987-01-01</li>
-                    <li>【alarm_line】若同时刻数据与昨日数据的环比低于次数据，则进行报警。</li>
-                    <li>【alarm_type】0代表监控level和iap，1代表只监控level，2代表只监控iap。</li>
-                    <p align="right" style="padding-right:20px">power by chunyang.xu
-                        <a target="_blank" href="http://sighttp.qq.com/authd?IDKEY=f36a98894c04255e4c9aa3334c8107d55e0d006e2749e336">
-                            <img border="0" style="display: inline-block; vertical-align: middle" src="http://wpa.qq.com/imgd?IDKEY=f36a98894c04255e4c9aa3334c8107d55e0d006e2749e336&pic=51"
-                                alt="点击这里给我发消息" title="点击这里给我发消息">
-                        </a>
-                    </p>
 
-                </ul>
+                <p style="font-size:80%">每出现一次预警，【current】数值增加1，当【current】=【max_line】则发送一次邮件！</p>
+                <p style="font-size:80%">【times】发送一次邮件则数值增加1，若达到9则重置；</p>
+                <p style="font-size:80%">【total_times】是指统计日发送邮件的次数；</p>
+                <p style="font-size:80%">【last_mail_time】最近一次发送邮件报警的时间，默认1987-01-01</p>
+                <p style="font-size:80%">【alarm_line】若同时刻数据与昨日数据的环比低于次数据，则进行报警。</p>
+                <p style="font-size:80%">【alarm_type】0代表监控level和iap，1代表只监控level，2代表只监控iap。</p>
+                <p align="right" style="padding-right:20px">power by chunyang.xu
+                    <a target="_blank" href="http://sighttp.qq.com/authd?IDKEY=f36a98894c04255e4c9aa3334c8107d55e0d006e2749e336">
+                        <img border="0" style="display: inline-block; vertical-align: middle" src="http://wpa.qq.com/imgd?IDKEY=f36a98894c04255e4c9aa3334c8107d55e0d006e2749e336&pic=51"
+                            alt="点击这里给我发消息" title="点击这里给我发消息">
+                    </a>
+                </p>
             </td>
         </tr>
     </table>
