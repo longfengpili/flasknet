@@ -58,6 +58,6 @@ def show():
         return render_template('user/index.html')
 
 
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('user/not_found.html'), 404
+# @app.errorhandler(404)
+# def not_found_error(error):
+#     return render_template('user/not_found.html'), 404

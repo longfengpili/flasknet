@@ -16,6 +16,20 @@ load_log = logging.getLogger('loading')
 
 from functools import wraps
 
+def admin_login_required(func):
+    @wraps(func)
+    def admin_login_judge(*args,**rw):
+        username = current_user.username
+        load_log.info(username)
+        if Admin.query.filter_by(username=username).first():
+            load_log.info(Admin.query.filter_by(username=username).first())
+            f = func()
+            return f
+        else:
+            load_log.info('admin.not_found')
+            return render_template('admin/not_found.html')
+    return admin_login_judge
+
 
 admin = Blueprint('admin',__name__)
 
@@ -107,6 +121,7 @@ def login():
 
 @admin.route('/logout/')
 @login_required
+@admin_login_required
 def logout():
     username = current_user.username
     print(username)
@@ -118,6 +133,7 @@ def logout():
 
 @admin.route('/add/',methods=['POST','GET'])
 @login_required
+@admin_login_required
 def add():
     if request.method == 'POST':
         p_admin = request.form.get('username',None)
@@ -148,6 +164,7 @@ def add():
 
 @admin.route('/show')
 @login_required
+@admin_login_required
 def show():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
     print(today)
