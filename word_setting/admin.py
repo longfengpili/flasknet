@@ -169,7 +169,7 @@ def show():
 @login_required
 @admin_login_required
 def download(filename):
-    return send_file('images/{}'.format(filename)')
+    return send_file('images/{}'.format(filename))
 
 @app.errorhandler(404)
 def not_found_error(error):
