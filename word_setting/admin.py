@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #-*- coding:utf-8 -*-
 
-from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response
+from flask import Blueprint, render_template, request, flash, redirect, url_for,make_response,send_file
 from .models import Admin,alarm_setting,User
 from word_setting import db,login_manager,app,login_required, logout_user, login_user, current_user
 import datetime,time
@@ -9,6 +9,7 @@ import config as cf
 import logging
 from logging import config
 import re
+import os
 
 
 config.fileConfig('loadlog.conf')
@@ -162,6 +163,13 @@ def show():
         return render_template('admin/show.html', settings=setting, date=today)
     else:
         return render_template('admin/index.html')
+
+
+@admin.route('/download/<filename>')
+@login_required
+@admin_login_required
+def download(filename):
+    return send_file('images/{}'.format(filename)')
 
 @app.errorhandler(404)
 def not_found_error(error):
