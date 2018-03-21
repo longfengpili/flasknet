@@ -169,6 +169,7 @@ def show():
 @login_required
 @admin_login_required
 def download(filename):
+    print(filename)
     return send_file('images/{}'.format(filename))
 
 @app.errorhandler(404)
