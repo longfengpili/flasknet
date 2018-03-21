@@ -22,7 +22,7 @@ def admin_login_required(func):
     def admin_login_judge(*args,**rw):
         username = current_user.username
         if Admin.query.filter_by(username=username).first():
-            f = func()
+            f = func(*args, **rw)
             return f
         else:
             return render_template('admin/not_found.html')
@@ -171,6 +171,13 @@ def show():
 def download(filename):
     load_log.info(filename)
     return send_file('images/{}'.format(filename))
+
+@admin.route('/test/<name>')
+@login_required
+@admin_login_required
+def test(name):
+    load_log.info(name)
+    return render_template('admin/test.html',name = name)
 
 @app.errorhandler(404)
 def not_found_error(error):
