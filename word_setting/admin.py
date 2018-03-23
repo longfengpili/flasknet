@@ -172,7 +172,7 @@ def download(filename):
     load_log.info(filename)
     response = make_response()
     response['Content-Type'] = 'application/png'
-    response['X-Accel-Redirect'] = '/vagrant/upload/{}'.format(filename)
+    response['X-Accel-Redirect'] = '/images/{}'.format(filename)
     return response
 
 @admin.route('/test/<name>')
