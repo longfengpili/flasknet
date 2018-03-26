@@ -170,7 +170,7 @@ def show():
 @admin_login_required
 def download(filename):
     load_log.info(filename)
-    load_log.info(url_for(send_file('images/{}'.format(filename))))
+    load_log.info(url_for('images/{}'.format(filename)))
     return send_file(url_for('images/{}'.format(filename)))
 
 @admin.route('/test/<name>')
