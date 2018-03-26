@@ -170,10 +170,7 @@ def show():
 @admin_login_required
 def download(filename):
     load_log.info(filename)
-    response = make_response()
-    response['Content-Type'] = 'application/png'
-    response['X-Accel-Redirect'] = '/images/{}'.format(filename)
-    return response
+    return send_file('upload/{}'.format(filename))
 
 @admin.route('/test/<name>')
 @login_required
