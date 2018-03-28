@@ -20,7 +20,7 @@ from functools import wraps
 def admin_login_required(func):
     @wraps(func)
     def admin_login_judge(*args,**rw):
-        username = current_user.username
+        username = request.cookies.get('username')
         if Admin.query.filter_by(username=username).first():
             f = func(*args, **rw)
             return f
@@ -165,7 +165,7 @@ def show():
         return render_template('admin/index.html')
 
 
-@admin.route('/download/<filename>')
+@admin.route('/wordimages/<filename>')
 @login_required
 @admin_login_required
 def download(filename):
