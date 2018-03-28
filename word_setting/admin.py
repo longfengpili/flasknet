@@ -171,8 +171,8 @@ def show():
 def download(filename):
     load_log.info(filename)
     response = make_response()
-    response['Content-Type'] = 'application/png'
-    response['X-Accel-Redirect'] = '/admin/images/{}'.format(filename)
+    response.headers['Content-Type'] = 'application/png'
+    response.headers['X-Accel-Redirect'] = '/admin/images/{}'.format(filename)
     return response
 
 @admin.route('/test/<name>')
