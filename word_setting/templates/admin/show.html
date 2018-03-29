@@ -63,6 +63,16 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
+        .max {
+            width: 100%;
+            height: auto;
+        }
+
+        .min {
+            width: 50%;
+            height: auto;
+        }
     </style>
 </head>
 
@@ -100,7 +110,8 @@
 
 
     {% if settings %}
-    <table border="1px" align="center" cellspacing="0" cellpadding="6" background="{{ url_for('static',filename='admin/images/table.jpg')}}" width="1148";>
+    <table border="1px" align="center" cellspacing="0" cellpadding="6" background="{{ url_for('static',filename='admin/images/table.jpg')}}"
+        width="1148" ;>
         <tr>
             <th>app_name</th>
             <th>platform</th>
@@ -156,10 +167,11 @@
     {% endif %}
 
     <h2 align="center">【{{date}}】各版本实时数据</h2>
-    <table border="1px" align="center" cellspacing="0" cellpadding="6" width="1148";>
+    <table border="1px" align="center" cellspacing="0" cellpadding="6" width="1148" ;>
         <tr>
             <td>
-                <img border="0" src="/admin/wordimages/word_production(ios).png" alt="" align="middle" width="100%">
+                <img border="0" src="/admin/wordimages/word_production(ios).png" alt="" align="middle">
+
             </td>
             <td>
                 <img border="0" src="/admin/wordimages/word_production(googleplay).png" alt="" align="middle" width="100%">
@@ -191,6 +203,17 @@
             </td>
         </tr>
     </table>
+
+                
+<!-- <img id="img" class="min" src="{{ url_for('static',filename='admin/images/table.jpg')}}" style="cursor:pointer;"
+/>
+<script>
+    $('#img').click(function () {
+        $(this).toggleClass('min');
+        $(this).toggleClass('max');
+    });
+</script> -->
+
 
 
 
