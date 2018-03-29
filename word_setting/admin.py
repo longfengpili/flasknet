@@ -20,7 +20,7 @@ from functools import wraps
 def admin_login_required(func):
     @wraps(func)
     def admin_login_judge(*args,**rw):
-        username = request.cookies.get('username')
+        username = current_user.username
         if Admin.query.filter_by(username=username).first():
             f = func(*args, **rw)
             return f
