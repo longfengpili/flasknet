@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="600">
     <title>Admin show</title>
@@ -65,12 +66,12 @@
         }
 
         .max {
-            width: 100%;
+            width: 200%;
             height: auto;
         }
 
         .min {
-            width: 50%;
+            width: 100%;
             height: auto;
         }
     </style>
@@ -203,15 +204,13 @@
         </tr>
     </table>
 
-                
-<!-- <img id="img" class="min" src="{{ url_for('static',filename='admin/images/table.jpg')}}" style="cursor:pointer;"
-/>
-<script>
-    $('#img').click(function () {
-        $(this).toggleClass('min');
-        $(this).toggleClass('max');
-    });
-</script> -->
+
+    <script>
+        $('img').click(function () {
+            $(this).toggleClass('max');
+            $(this).toggleClass('min');
+        });
+    </script>
 
 
 
