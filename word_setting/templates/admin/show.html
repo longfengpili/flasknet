@@ -65,14 +65,61 @@
             display: block;
         }
 
-        .max {
-            width: 200%;
-            height: auto;
+
+        /* 以下是图片处理 */
+
+        table tr td img {
+            width: 60px;
         }
 
-        .min {
-            width: 100%;
-            height: auto;
+        table tr td {
+            text-align: center;
+            padding: 5px;
+        }
+
+        table tr th {
+            background: #ddd;
+            height: 36px;
+        }
+
+        table tr td {
+            border-bottom: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+        }
+
+        table tr td:last-child {
+            border-right: 1px solid #ddd;
+        }
+
+        .bg-img {
+            position: fixed;
+            background-color: rgba(190, 190, 190, 0.5);
+            z-index: 9999;
+        }
+
+        .tra-img {
+            text-align: center;
+            position: relative;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+
+        .zoom-in {
+            cursor: -moz-zoom-in;
+            cursor: -webkit-zoom-in;
+            cursor: zoom-in;
+            /* cursor: url(../images/big.cur); */
+        }
+
+        .zoom-out {
+            cursor: -moz-zoom-out;
+            cursor: -webkit-zoom-out;
+            cursor: zoom-out;
+            /* cursor: url(../images/small.cur); */
         }
     </style>
 </head>
@@ -171,45 +218,62 @@
     <table border="1px" align="center" cellspacing="0" cellpadding="6" width="1148" ;>
         <tr>
             <td>
-                <img border="0" class="min" src="/admin/wordimages/word_production(ios).png" alt="" align="middle" width="100%">
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_production(ios).png" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" class="min" src="/admin/wordimages/word_production(googleplay).png" alt="" align="middle" width="100%">
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_production(googleplay).png" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" class="min" src="/admin/wordimages/word_production(web).png" alt="" align="middle" width="100%">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img border="0" class="min" src="/admin/wordimages/word_v4_production(ios).png" alt="" align="middle" width="100%">
-            </td>
-            <td>
-                <img border="0" class="min" src="/admin/wordimages/word_v4_production(googleplay).png" alt="" align="middle" width="100%">
-            </td>
-            <td>
-                <img border="0" class="min" src="/admin/wordimages/word_v4_production(web).png" alt="" align="middle" width="100%">
+                <img border="0" class="zoom-in" class="zoom-in" src="/admin/wordimages/word_production(web).png" alt="" align="middle" width="100%">
             </td>
         </tr>
         <tr>
             <td>
-                <img border="0" class="min" src="/admin/wordimages/word_v5_production(ios).png" alt="" align="middle" width="100%">
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_v4_production(ios).png" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" class="min" src="/admin/wordimages/word_v5_production(googleplay).png" alt="" align="middle" width="100%">
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_v4_production(googleplay).png" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" class="min" src="/admin/wordimages/word_v5_production(web).png" alt="" align="middle" width="100%">
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_v4_production(web).png" alt="" align="middle" width="100%">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_v5_production(ios).png" alt="" align="middle" width="100%">
+            </td>
+            <td>
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_v5_production(googleplay).png" alt="" align="middle" width="100%">
+            </td>
+            <td>
+                <img border="0" class="zoom-in" src="/admin/wordimages/word_v5_production(web).png" alt="" align="middle" width="100%">
             </td>
         </tr>
     </table>
 
 
     <script>
-        $('img').click(function () {
-            $(this).toggleClass('max');
-            $(this).toggleClass('min');
-        });
+        //点击图片放大
+        $(document).on("click", "table tr td img", function () {
+            var img_content = $(this).attr("src");
+            $("body").append(
+                "<div class='bg-img'>"
+                + "<div class='tra-img'>"
+                + "<img src='" + img_content + "' class='zoom-out'>"
+                + "</div></div>"
+            );
+            //bottom:'0',left:'0';会让图片从页面左下放出现，如果想从左上方出现，将bottom:'0'改成top:'0';
+            $(".bg-img").animate({
+                width: "100%",
+                height: "100%",
+                bottom: "0",
+                left: "0",
+            }, "normal")
+        })
+        //点击外层区域页面图片隐藏
+        $(document).on("click", ".bg-img", function () {
+            $(this).remove();
+        })
     </script>
 
 
