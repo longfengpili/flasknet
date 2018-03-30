@@ -275,35 +275,35 @@
     <table border="1px" align="center" cellspacing="0" cellpadding="6" width="1148" ;>
         <tr>
             <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_production(googleplay).png" alt="" align="middle" width="100%">
+                <img border="0" id="myImg" src="{{ url_for('static',filename='admin/images/table.jpg')}}" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_production(googleplay).png" alt="" align="middle" width="100%">
+                <img border="0" id="myImg1" src="{{ url_for('static',filename='admin/images/logout.jpg')}}" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_production(web).png" alt="" align="middle" width="100%">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_v4_production(ios).png" alt="" align="middle" width="100%">
-            </td>
-            <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_v4_production(googleplay).png" alt="" align="middle" width="100%">
-            </td>
-            <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_v4_production(web).png" alt="" align="middle" width="100%">
+                <img border="0" id="myImg2" src="/admin/wordimages/word_production(web).png" alt="" align="middle" width="100%">
             </td>
         </tr>
         <tr>
             <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_v5_production(ios).png" alt="" align="middle" width="100%">
+                <img border="0" id="myImg3" src="/admin/wordimages/word_v4_production(ios).png" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_v5_production(googleplay).png" alt="" align="middle" width="100%">
+                <img border="0" id="myImg4" src="/admin/wordimages/word_v4_production(googleplay).png" alt="" align="middle" width="100%">
             </td>
             <td>
-                <img border="0" id="myImg" src="/admin/wordimages/word_v5_production(web).png" alt="" align="middle" width="100%">
+                <img border="0" id="myImg5" src="/admin/wordimages/word_v4_production(web).png" alt="" align="middle" width="100%">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img border="0" id="myImg6" src="/admin/wordimages/word_v5_production(ios).png" alt="" align="middle" width="100%">
+            </td>
+            <td>
+                <img border="0" id="myImg7" src="/admin/wordimages/word_v5_production(googleplay).png" alt="" align="middle" width="100%">
+            </td>
+            <td>
+                <img border="0" id="myImg8" src="/admin/wordimages/word_v5_production(web).png" alt="" align="middle" width="100%">
             </td>
         </tr>
     </table>
@@ -323,11 +323,24 @@
     </div>
 
     <script>
+
+
+        // 获取id
+        var alist = document.getElementsByTagName("img");
+        var len = alist.length;
+        for (var i = 0; i < len; i++) {
+            alist[i].onclick = function () {
+                var picid = this.id
+                alert('teee')
+                return picid;
+            }
+        }
+
+        alert(picid)
         // 获取弹窗
         var modal = document.getElementById('myModal');
-
         // 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容
-        var img = document.getElementById('myImg');
+        var img = document.getElementById(picid);
         var modalImg = document.getElementById("img01");
         var captionText = document.getElementById("caption");
         img.onclick = function () {
