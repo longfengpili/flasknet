@@ -3,6 +3,7 @@
 
 from word_setting import db  # db是在app/__init__.py生成的关联后的SQLAlchemy实例
 #from word_setting import login_manager
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
@@ -10,7 +11,18 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(320), unique=True)
-    password = db.Column(db.String(32), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute/ password 不是一个可读属性。')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def is_authenticated(self):
         return True
@@ -33,7 +45,24 @@ class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(320), unique=True)
-    password = db.Column(db.String(32), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, username,email, password_hash):
+        self.username = username
+        self.email = email
+        self.password_hash = password_hash
+
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute/ password 不是一个可读属性。')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def is_authenticated(self):
         return True

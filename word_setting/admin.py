@@ -77,11 +77,14 @@ def login():
             return response
     elif request.method == 'POST':
         username = request.form.get('username')
+        password = request.form.get('password')
+        # load_log.info('{},{}'.format(username, password))
         if Admin.query.filter_by(username = username).first():
             admin = Admin.query.filter_by(username=username).first()
+            # load_log.info('{}'.format(admin.password_hash))
             if not admin: 
                 flash('该用户不存在')
-            elif request.form.get('password') != admin.password:  
+            elif admin.verify_password(password) is False:
                 flash('密码错误')  
             else:
                 login_user(admin)
@@ -94,15 +97,15 @@ def login():
             load_log.info(user)
             if not user: 
                 flash('该用户不存在')
-            elif request.form.get('password') != user.password:  
-                flash('密码错误')  
+            elif user.verify_password(password) is False:
+                flash('密码错误')
             else:
                 login_user(user)
                 response = make_response(redirect(url_for('user.show')))
                 response.set_cookie("username", username, max_age=600)
                 return response
         else:
-            load_log.info('wrong')
+            flash('该用户不存在')
 
     return render_template('admin/login.html')
 
