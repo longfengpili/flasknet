@@ -44,4 +44,15 @@
         </td>
     </table>
 
+    <div class="container" style="width:100%;text-align:center;">
+        <br> {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <p style="color:red">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}</p>
+        </div>
+        {% endfor %} {% block page_content %}{% endblock %}
+    </div>
+
+
 </html>

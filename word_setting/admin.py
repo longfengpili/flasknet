@@ -178,12 +178,43 @@ def download(filename):
     response.headers['X-Accel-Redirect'] = '/admin/images/{}'.format(filename)
     return response
 
-@admin.route('/test/<name>')
-@login_required
-@admin_login_required
-def test(name):
-    load_log.info(name)
-    return render_template('admin/test.html',name = name)
+
+@admin.route('/findpassword/', methods=['POST', 'GET'])
+def findpassword():
+    if request.method == 'POST':
+        username = request.form.get('username', None)
+        email = request.form.get('email', None)
+        password = request.form.get('password', None)
+        newPassword = request.form.get('newpassword', None)
+
+        if User.query.filter_by(username=username).first():
+            user = User.query.filter_by(username=username).first()
+            if email != user.email:
+                flash('email错误')
+            elif user.verify_password(password) is False:
+                flash('密码错误')
+            else:
+                user.password_hash = user.password_hash_update(newPassword)
+                db.session.add(user)
+                db.session.commit()
+
+        elif Admin.query.filter_by(username=username).first():
+            admin = Admin.query.filter_by(username=username).first()
+            if email != admin.email:
+                flash('email错误')
+            elif admin.verify_password(password) is False:
+                flash('密码错误')
+            else:
+                # load_log.info(admin.password_hash)
+                admin.password_hash = admin.password_hash_update(newPassword)
+                db.session.add(admin)
+                db.session.commit()
+                # load_log.info(admin.password_hash)
+
+        else:
+            flash('用户名不存在')
+    return render_template('admin/findpasswd.html')
+    
 
 @app.errorhandler(404)
 def not_found_error(error):

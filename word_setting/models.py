@@ -24,6 +24,9 @@ class User(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def password_hash_update(self, password):
+        return self.password_hash
+
     def is_authenticated(self):
         return True
 
@@ -47,10 +50,10 @@ class Admin(db.Model):
     email = db.Column(db.String(320), unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, username,email, password_hash):
-        self.username = username
-        self.email = email
-        self.password_hash = password_hash
+    # def __init__(self, username,email, password_hash):
+    #     self.username = username
+    #     self.email = email
+    #     self.password_hash = password_hash
 
 
     @property
@@ -63,6 +66,9 @@ class Admin(db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+        
+    def password_hash_update(self, password):
+        return generate_password_hash(password)
 
     def is_authenticated(self):
         return True
