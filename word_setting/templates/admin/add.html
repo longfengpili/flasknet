@@ -114,6 +114,17 @@
             <input type="submit" value="提      交" />
         </form>
 
+        <div class="container" style="text-align:center;">
+            <br> {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <p style="color:red">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}</p>
+            </div>
+            {% endfor %} {% block page_content %}{% endblock %}
+            <br/>
+        </div>
+
         <table width="60%" align="center" style="margin-top: 40px;" cellpadding="0">
             <tr>
                 <td valign="top">{% if admins%}

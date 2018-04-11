@@ -50,12 +50,6 @@ class Admin(db.Model):
     email = db.Column(db.String(320), unique=True)
     password_hash = db.Column(db.String(128), nullable=False)
 
-    # def __init__(self, username,email, password_hash):
-    #     self.username = username
-    #     self.email = email
-    #     self.password_hash = password_hash
-
-
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute/ password 不是一个可读属性。')

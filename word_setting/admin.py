@@ -129,11 +129,20 @@ def add():
         p_email = request.form.get('email',None)
         p_password = request.form.get('password',None)
         p_role = request.form.get('role',None)
+        user = User.query.filter_by(username=p_admin).first()
+        admin = Admin.query.filter_by(username=p_admin).first()
 
         if not p_admin or not p_email or not p_password:
             return 'input error'
         
-        if p_role == 'admin':
+        elif admin:
+            flash('{}用户已经存在'.format(admin))
+            return redirect(url_for('admin.add'))
+        elif user:
+            flash('{}用户已经存在'.format(user))
+            return redirect(url_for('admin.add'))
+
+        elif p_role == 'admin':
             newobj = Admin(username=p_admin, email=p_email, password=p_password)
             db.session.add(newobj)
             db.session.commit()
