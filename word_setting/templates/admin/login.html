@@ -19,30 +19,37 @@
         </p>
     </strong>
     <br/>
-    <div style="width:100%;text-align:center;">
-        <form action="" method="POST">
-            <br>Username
-            <input type="text" name="username" />
-            <br/>
-            <br>Password
-            <input type="password" name="password" />
-            <br/>
-            <br>
-            <input type="submit" value="登      录" />
-            <br/>
-        </form>
+    <table border="0px" align="center" cellspacing="0" cellpadding="6">
+        <tr>
+            <td>
+                <form style="text-align:center;" action="" method="POST">
+                    <br>Username
+                    <input type="text" name="username" />
+                    <br/>
+                    <br>Password
+                    <input type="password" name="password" />
+                    <br/>
+                    <br>
+                    <div style="text-align:right;font-size:80%;">
+                        <a href="/admin/findpassword" style="padding-right: 120px;color:lightslategray;">忘记密码</a>
+                    </div>
+                    <input style="font-size:100%" type="submit" value="      登        录      " />
+                    <br/>
+                </form>
 
-        <div class="container">
-            <br> {% for message in get_flashed_messages() %}
-            <div class="alert alert-warning">
-                <p style="color:red">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    {{ message }}</p>
-            </div>
-            {% endfor %} {% block page_content %}{% endblock %}
-        </div>
-        <br/>
-    </div>
+                <div class="container" style="text-align:center;">
+                    <br> {% for message in get_flashed_messages() %}
+                    <div class="alert alert-warning">
+                        <p style="color:red">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            {{ message }}</p>
+                    </div>
+                    {% endfor %} {% block page_content %}{% endblock %}
+                    <br/>
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>
 
 </html>

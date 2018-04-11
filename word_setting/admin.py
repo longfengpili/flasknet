@@ -197,6 +197,7 @@ def findpassword():
                 user.password_hash = user.password_hash_update(newPassword)
                 db.session.add(user)
                 db.session.commit()
+                flash('密码修改成功')
 
         elif Admin.query.filter_by(username=username).first():
             admin = Admin.query.filter_by(username=username).first()
@@ -209,6 +210,7 @@ def findpassword():
                 admin.password_hash = admin.password_hash_update(newPassword)
                 db.session.add(admin)
                 db.session.commit()
+                flash('密码修改成功')
                 # load_log.info(admin.password_hash)
 
         else:
