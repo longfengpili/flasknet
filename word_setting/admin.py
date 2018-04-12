@@ -120,7 +120,7 @@ def logout():
     return response
 
 
-@admin.route('/add/',methods=['POST','GET'])
+@admin.route('/add',methods=['POST','GET'])
 @login_required
 @admin_login_required
 def add():
@@ -182,9 +182,15 @@ def show():
 def delete(username):
     user = User.query.filter_by(username=username).first()
     admin = Admin.query.filter_by(username=username).first()
+    xu = Admin.query.filter_by(username='chunyang.xu').first()
     if admin:
-        db.session.delete(admin)
-        db.session.commit()
+        if admin == xu:
+            flash('不能删除{}'.format(xu))
+        elif admin == current_user:
+            flash('不能删除当前登录帐号')
+        else:
+            db.session.delete(admin)
+            db.session.commit()
     elif user:
         db.session.delete(user)
         db.session.commit()
