@@ -182,7 +182,7 @@ def show():
 def delete(username):
     user = User.query.filter_by(username=username).first()
     admin = Admin.query.filter_by(username=username).first()
-    xu = Admin.query.filter_by(username='chunyang.xu').first()
+    xu = Admin.query.filter_by(username=cf.adminlist[0]).first()
     if admin:
         if admin == xu:
             flash('不能删除{}'.format(xu))
