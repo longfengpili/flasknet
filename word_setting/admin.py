@@ -176,6 +176,20 @@ def show():
     else:
         return render_template('admin/index.html')
 
+@admin.route('/delete/<username>')
+@login_required
+@admin_login_required
+def delete(username):
+    user = User.query.filter_by(username=username).first()
+    admin = Admin.query.filter_by(username=username).first()
+    if admin:
+        db.session.delete(admin)
+        db.session.commit()
+    elif user:
+        db.session.delete(user)
+        db.session.commit()
+    return redirect(url_for('admin.add'))
+
 
 @admin.route('/wordimages/<filename>')
 @login_required
