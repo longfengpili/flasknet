@@ -132,11 +132,13 @@
                         <tr>
                             <th>AdminName</th>
                             <th>Email</th>
+                            <th>Delete</th>
                         </tr>
                         {% for u in admins %}
                         <tr>
                             <td>{{u.username}}</td>
                             <td>{{u.email}}</td>
+                            <td><button onclick="location.href={{url_for('admin.delete',username='test')}}">删 除</button></td>
                         </tr>
                         {% endfor %}
                     </table>
