@@ -1,17 +1,68 @@
- {% extends "admin/layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    {% block title1 %}{{ super() }}{% endblock %} {% block title %}admin show{% endblock %}
+    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="600">
+    <title>Admin show</title>
+
     <style>
-        {
-            % block styles %
+        p {
+            margin: 0 auto
         }
 
-            {
-                {
-                super()
-            }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a,
+        .dropbtn {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: #111;
+        }
+
+        .dropdown {
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
         /* 触发弹窗图片的样式 */
@@ -127,15 +178,35 @@
                 width: 100%;
             }
         }
-
-            {
-            % endblock %
-        }
     </style>
 </head>
 
 <body>
-    {% block body %} {{ super() }}
+    <ul>
+        <li>
+            <a class="active" href="/admin/index">zenjoy主页</a>
+        </li>
+        <li>
+            <a href="/user/show">数据监控(user)</a>
+        </li>
+        <li>
+            <a href="/admin/show">数据监控(admin)</a>
+        </li>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">管理功能</a>
+            <div class="dropdown-content">
+                <a href="/admin/add">用户管理</a>
+                <!-- <a href="#">链接 2</a>
+                <a href="#">链接 3</a> -->
+            </div>
+        </div>
+    </ul>
+
+    <p align="right">{{current_user}}
+        <a href="logout">
+            <img border="0" src="{{ url_for('static',filename='admin/images/logout.jpg')}}" alt="logout" width="60" height="30" align="middle">
+        </a>
+    </p>
     <h1 align="center">【{{date}}】配置及监控状态</h1>
 
     <!-- <script>setInterval("timenow.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
@@ -260,7 +331,8 @@
         for (var i = 0; i < len; i++) {
             alist[i].onclick = function () {
                 var picid = this.id
-                if (this.id.match('myImg')) {// 获取弹窗
+                if (this.id.match('myImg'))
+                    {// 获取弹窗
                     var modal = document.getElementById('myModal')
                     // 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容
                     var img = document.getElementById(picid)
@@ -271,7 +343,7 @@
                     modalImg.src = this.src
                     captionText.innerHTML = this.alt
                     // }
-                }
+                    }
 
                 // 获取 <span> 元素，设置关闭按钮
                 var span = document.getElementsByClassName("close")[0]
@@ -283,7 +355,9 @@
             }
         }
 
-    </script> {% endblock %}
+    </script>
+
+
 
 
 </body>

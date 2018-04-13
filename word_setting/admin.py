@@ -207,8 +207,8 @@ def download(filename):
     return response
 
 
-@admin.route('/findpassword/', methods=['POST', 'GET'])
-def findpassword():
+@admin.route('/modifypassword', methods=['POST', 'GET'])
+def modifypassword():
     if request.method == 'POST':
         username = request.form.get('username', None)
         email = request.form.get('email', None)
@@ -243,7 +243,7 @@ def findpassword():
 
         else:
             flash('用户名不存在')
-    return render_template('admin/findpasswd.html')
+    return render_template('admin/modifypassword.html')
     
 
 @app.errorhandler(404)

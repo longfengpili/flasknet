@@ -1,27 +1,95 @@
-{% extends "admin/layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    {% block title1 %}{{ super() }}{% endblock %} {% block title %}admin add{% endblock %}
     <meta charset="UTF-8">
+    <title>Admin Add</title>
     <style>
-        {
-            % block styles %
+        p {
+            margin: 0 auto
         }
 
-            {
-                {
-                super()
-            }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
         }
 
-            {
-            % endblock %
+        li {
+            float: left;
+        }
+
+        li a,
+        .dropbtn {
+            display: inline-block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover,
+        .dropdown:hover .dropbtn {
+            background-color: #111;
+        }
+
+        .dropdown {
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
     </style>
 </head>
 
 <body>
-    {% block body %} {{ super() }}
+    <ul>
+        <li>
+            <a class="active" href="/admin/index">zenjoy主页</a>
+        </li>
+        <li>
+            <a href="/user/show">数据监控(user)</a>
+        </li>
+        <li>
+            <a href="/admin/show">数据监控(admin)</a>
+        </li>
+        <div class="dropdown">
+            <a href="#" class="dropbtn">管理功能</a>
+            <div class="dropdown-content">
+                <a href="/admin/add">用户管理</a>
+                <!-- <a href="#">链接 2</a>
+                <a href="#">链接 3</a> -->
+            </div>
+        </div>
+    </ul>
+
+    <p align="right">{{current_user}}
+        <a href="logout">
+            <img border="0" src="{{ url_for('static',filename='admin/images/logout.jpg')}}" alt="logout" width="60" height="30" align="middle">
+        </a>
+    </p>
 
     <br>
     <div style="height: 60px"></div>
@@ -105,9 +173,6 @@
             </tr>
         </table>
     </div>
-    {% endblock %}
 
-
-</body>
 
 </html>
