@@ -208,6 +208,8 @@ def download(filename):
 
 
 @admin.route('/modifypassword', methods=['POST', 'GET'])
+@login_required
+@admin_login_required
 def modifypassword():
     if request.method == 'POST':
         username = request.form.get('username', None)
