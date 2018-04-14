@@ -2,20 +2,9 @@
 
 <head>
     {% block title1 %}{{ super() }}{% endblock %} {% block title %}admin show{% endblock %}
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"> 
+    {% block styles %} /* 触发弹窗图片的样式 */
     <style>
-        {
-            % block styles %
-        }
-
-            {
-                {
-                super()
-            }
-        }
-
-        /* 触发弹窗图片的样式 */
-
         #myImg {
             border-radius: 5px;
             cursor: pointer;
@@ -127,11 +116,8 @@
                 width: 100%;
             }
         }
-
-            {
-            % endblock %
-        }
     </style>
+    { % endblock % }
 </head>
 
 <body>
