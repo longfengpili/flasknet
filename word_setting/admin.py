@@ -252,7 +252,9 @@ def modifypassword():
 
 @admin.route('/findpassword/<int:step>', methods=['POST', 'GET'])
 def find_password(step):
+    refer = request.headers.get('Referer', None)
     message = int(request.args.get('message',0))
+
     if request.method == 'POST':
         username = request.form.get('username', None)
         email = request.form.get('email', None)
@@ -310,13 +312,14 @@ def find_password(step):
         else:
             return redirect(url_for('admin.find_password', step=1))
     elif step > 2:
+        return redirect(url_for('admin.find_password', step=1))
+    elif step == 2 and not refer:
         flash('请重新提交申请，获取验证码！')
         return redirect(url_for('admin.find_password', step=1))
 
     return render_template('admin/findpassword_{}.html'.format(step))
 
     
-
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('admin/not_found.html'), 404
