@@ -10,6 +10,8 @@ import logging
 from logging import config
 import re
 import os
+import random
+from flasknet.send_mail import send_mail
 
 
 config.fileConfig('loadlog.conf')
@@ -246,6 +248,73 @@ def modifypassword():
         else:
             flash('用户名不存在')
     return render_template('admin/modifypassword.html')
+
+
+@admin.route('/findpassword/<int:step>', methods=['POST', 'GET'])
+def find_password(step):
+    message = int(request.args.get('message',0))
+    if request.method == 'POST':
+        username = request.form.get('username', None)
+        email = request.form.get('email', None)
+        username = request.form.get('username', None)
+        security_code = request.form.get('securitycode', None)
+        newpassword = request.form.get('newpassword', None)
+
+        user = User.query.filter_by(username=username).first()
+        admin = Admin.query.filter_by(username=username).first()
+
+        if step == 1:
+            if not username or not email:
+                flash('请输入完整信息')
+            elif admin and admin.email == email:
+                i = random.randint(20, len(admin.password_hash)-8)
+                security_code = admin.password_hash[i:i+6]
+                send_mail(email,security_code)
+                flash('请登录邮箱查看验证码并输入修改密码')
+                return redirect(url_for('admin.find_password', step=2, message=i))
+            elif user and user.email == email:
+                i = random.randint(20, len(user.password_hash)-8)
+                security_code = user.password_hash[i:i+6]
+                send_mail(email, security_code)
+                flash('请登录邮箱查看验证码并输入修改密码')
+                return redirect(url_for('admin.find_password', step=2, message=i))
+            else:
+                flash('请输入正确信息')
+        elif step == 2:
+            if not username or not security_code or not newpassword:
+                flash('请输入完整信息')
+            elif admin:
+                security_code_real = admin.password_hash[message:message+6]
+                if security_code == security_code_real:
+                    admin.password_hash = admin.password_hash_update(newpassword)
+                    db.session.add(admin)
+                    db.session.commit()
+                    flash('完成修改密码，请登录！')
+                    return redirect(url_for('admin.login'))
+                else:
+                    flash('请输入正确的验证码')
+                    return redirect(url_for('admin.find_password', step=2,message=message))
+            elif user:
+                security_code_real = user.password_hash[message:message+6]
+                if security_code == security_code_real:
+                    user.password_hash = user.password_hash_update(newpassword)
+                    db.session.add(user)
+                    db.session.commit()
+                    flash('完成修改密码，请登录！')
+                    return redirect(url_for('admin.login'))
+                else:
+                    flash('请输入正确的验证码')
+                    return redirect(url_for('admin.login', step=2, message=message))
+            else:
+                flash('请输入正确信息')
+        else:
+            return redirect(url_for('admin.find_password', step=1))
+    elif step > 2:
+        flash('请重新提交申请，获取验证码！')
+        return redirect(url_for('admin.find_password', step=1))
+
+    return render_template('admin/findpassword_{}.html'.format(step))
+
     
 
 @app.errorhandler(404)

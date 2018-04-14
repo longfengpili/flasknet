@@ -25,7 +25,7 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def password_hash_update(self, password):
-        return self.password_hash
+        return generate_password_hash(password)
 
     def is_authenticated(self):
         return True

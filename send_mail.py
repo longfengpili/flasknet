@@ -18,17 +18,9 @@ import random
 #导入配置
 import sys
 sys.path.append('..')
-import word_setting as cs
+import flasknet_setting as cs
 c_from_addr = cs.mail_address
 c_password = base64.b64decode(cs.mail_password.encode('utf-8')).decode('utf-8')
-c_to_addr = cs.to_address
-
-#导入图片地址
-import os
-pwd = os.getcwd()
-father_path = os.path.dirname(pwd)
-worddb_path = father_path+r'/worddb'
-
 
 
 def _format_addr(s):
@@ -36,15 +28,15 @@ def _format_addr(s):
     return formataddr((Header(name, 'utf-8').encode(), addr))
 
 
-def send_mail(app_name, platform, subject='【Attention】数据异常',note='test'):
+def send_mail(to_addr, security_code,subject='【word实时监控】验证码'):
     from_addr = c_from_addr
     password = c_password
-    to_addr = c_to_addr
+    to_addr = to_addr
     smtp_server = "smtp.office365.com:587"
 
     #创建一个带附件的实例
     msg = MIMEMultipart()
-    msg['From'] = _format_addr('Attention <{}>'.format(from_addr))
+    msg['From'] = _format_addr('【word实时监控】<{}>'.format(from_addr))
     #主题
     msg['Subject'] = Header(subject, 'utf-8').encode()
 
@@ -52,24 +44,14 @@ def send_mail(app_name, platform, subject='【Attention】数据异常',note='te
     #msg.attach(msgAlternative)
 
     html = """
-    <p>{}</p>
-    <p>近一天数据波动详见下图：</p>
-    <p><img src="cid:image1"></p>
+    <p>您正在申请修改密码，验证码：</p>
+    <p style="color:red"><strong>{}</strong></p>
     <p><a target="_blank" href="http://sighttp.qq.com/authd?IDKEY=8978c26b91afac72d92579b2e91f6c51700ed40eb07de5a7"><img border="0" src="http://wpa.qq.com/imgd?IDKEY=8978c26b91afac72d92579b2e91f6c51700ed40eb07de5a7&pic=51" alt="点击这里给我发消息" title="点击这里给我发消息"><strong>点击左侧QQ联系我！</strong></a></p>
-    """.format(note)
+    """.format(security_code)
 
     #正文
     msg.attach(MIMEText(html, 'html', 'utf-8'))
 
-    # 指定图片为当前目录
-    pic_add = r'{}/{}({}).png'.format(worddb_path,app_name,platform)
-    with open(pic_add, 'rb') as fp:
-        msgImage = MIMEImage(fp.read())
-        fp.close()
-    
-    # 定义图片 ID，在 HTML 文本中引用
-    msgImage.add_header('Content-ID', '<image1>')
-    msg.attach(msgImage)
     server = smtplib.SMTP()
     with server:
         #服务器连接
@@ -84,17 +66,15 @@ def send_mail(app_name, platform, subject='【Attention】数据异常',note='te
         server.login(from_addr, password)
 
         # 邮件发送
-        for to_addr_one in to_addr:
-            msg['To'] = _format_addr('监控人员 <{}>'.format(to_addr_one))
-            server.sendmail(from_addr, to_addr_one, msg.as_string())
-            time.sleep(random.uniform(0,5))
-        word_alarm.info('sendmail success!{},{},{},{}'.format(to_addr,app_name,platform,note))
-
+        
+        msg['To'] = _format_addr('监控人员 <{}>'.format(to_addr))
+        server.sendmail(from_addr, to_addr, msg.as_string())
+        time.sleep(random.uniform(0,5))
         # server.quit()
 
 
 
 if __name__ == '__main__':
-    send_mail('word_production','ios','test','test')
+    send_mail('398745129@qq.com','333333')
 
 
