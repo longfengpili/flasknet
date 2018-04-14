@@ -14,8 +14,6 @@ import base64
 import re
 import time
 import random
-from logging import config
-import logging
 
 #导入配置
 import sys
@@ -32,8 +30,6 @@ father_path = os.path.dirname(pwd)
 worddb_path = father_path+r'/worddb'
 
 
-config.fileConfig('wordlog.conf')
-word_alarm = logging.getLogger('alarm')
 
 def _format_addr(s):
     name, addr = parseaddr(s)
