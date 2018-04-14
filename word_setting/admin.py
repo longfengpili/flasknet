@@ -286,6 +286,7 @@ def find_password(step):
         elif step == 2:
             if not username or not security_code or not newpassword:
                 flash('请输入完整信息')
+                return redirect(url_for('admin.find_password', step=2, message=message, username=username_form))
             elif admin:
                 security_code_real = admin.password_hash[message:message+6]
                 if security_code == security_code_real:
@@ -296,7 +297,7 @@ def find_password(step):
                     return redirect(url_for('admin.login'))
                 else:
                     flash('请输入正确的验证码')
-                    return redirect(url_for('admin.find_password', step=2,message=message))
+                    return redirect(url_for('admin.find_password', step=2, message=message, username=username_form))
             elif user:
                 security_code_real = user.password_hash[message:message+6]
                 if security_code == security_code_real:
@@ -307,8 +308,9 @@ def find_password(step):
                     return redirect(url_for('admin.login'))
                 else:
                     flash('请输入正确的验证码')
-                    return redirect(url_for('admin.login', step=2, message=message))
+                    return redirect(url_for('admin.find_password', step=2, message=message, username=username_form))
             else:
+                return redirect(url_for('admin.find_password', step=2, message=message, username=username_form))
                 flash('请输入正确信息')
         else:
             return redirect(url_for('admin.find_password', step=1))
