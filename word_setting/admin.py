@@ -253,7 +253,8 @@ def modifypassword():
 @admin.route('/findpassword/<int:step>', methods=['POST', 'GET'])
 def find_password(step):
     refer = request.headers.get('Referer', None)
-    message = int(request.args.get('message',0))
+    message = int(request.args.get('message', 0))
+    username_form = request.args.get('username', None)
 
     if request.method == 'POST':
         username = request.form.get('username', None)
@@ -273,13 +274,13 @@ def find_password(step):
                 security_code = admin.password_hash[i:i+6]
                 send_mail(email,security_code)
                 flash('请登录邮箱查看验证码并输入修改密码')
-                return redirect(url_for('admin.find_password', step=2, message=i))
+                return redirect(url_for('admin.find_password', step=2, message=i,username=username))
             elif user and user.email == email:
                 i = random.randint(20, len(user.password_hash)-8)
                 security_code = user.password_hash[i:i+6]
                 send_mail(email, security_code)
                 flash('请登录邮箱查看验证码并输入修改密码')
-                return redirect(url_for('admin.find_password', step=2, message=i))
+                return redirect(url_for('admin.find_password', step=2, message=i, username=username))
             else:
                 flash('请输入正确信息')
         elif step == 2:
@@ -317,7 +318,7 @@ def find_password(step):
         flash('请重新提交申请，获取验证码！')
         return redirect(url_for('admin.find_password', step=1))
 
-    return render_template('admin/findpassword_{}.html'.format(step))
+    return render_template('admin/findpassword_{}.html'.format(step), username=username_form)
 
     
 @app.errorhandler(404)
